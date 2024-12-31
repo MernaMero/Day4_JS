@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>Test JS</title>
+    <style>
+        /* تنسيق عام للصفحة */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        /* تنسيق مكان عرض النواتج */
+        .task {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* مسافة بين كل Task والتانية */
+        }
+        /* تنسيق العناوين */
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        /* تنسيق الرسائل */
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #007BFF;
+            border-radius: 4px;
+        }
+        /* تنسيق الأخطاء */
+        .error {
+            border-left-color: #dc3545;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        /* تنسيق الفاصل */
+        .divider {
+            border-top: 2px solid #007BFF;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test JavaScript Functions</h1>
+    <div id="output"></div> <!-- مكان عرض النواتج -->
+    <script>
+        // الفنكشن دي بتطبع النص في الصفحة بشكل مرتب
+        function printToPage(message, isError = false) {
+            const outputDiv = document.getElementById("output");
+            const messageDiv = document.createElement("div");
+            messageDiv.className = isError ? "message error" : "message";
+            messageDiv.textContent = message;
+            outputDiv.appendChild(messageDiv);
+        }
+
+        // 1. الفنكشن دي بتتأكد إنك تدخل 2 parameters بس. لو أدخلت أقل أو أكتر، هتطلع error. لو صح، هتطبع الـ parameters.
+        function checkParameters(param1, param2) {
+            if (arguments.length !== 2) {
+                throw new Error("Exactly 2 parameters are required.");
+            }
+            printToPage(`Parameters are valid: ${param1}, ${param2}`);
+        }
+
+        // 2. الفنكشن دي بتجمع أي عدد من الأرقام. لو أدخلت حاجة مش رقم، هتطلع error. لو كلهم أرقام، هتجمعهم.
+        function addNumbers(...numbers) {
+            if (numbers.some(num => typeof num !== 'number')) {
+                throw new Error("All parameters must be numerical values.");
+            }
+            return numbers.reduce((sum, num) => sum + num, 0);
+        }
+
+        // 3. الفنكشن دي بتقلب أي عدد من الـ parameters. يعني لو أدخلت 1, 2, 3 هترجعهم 3, 2, 1.
+        function reverseParameters(...params) {
+            return params.reverse();
+        }
+
+        // 4. الفنكشن دي بتشوف إذا الرقم أولي ولا لا. الرقم الأولي هو اللي يقبل القسمة على نفسه وواحد بس.
+        function isPrime(num) {
+            if (num <= 1) return false;
+            if (num === 2) return true;
+            if (num % 2 === 0) return false;
+            for (let i = 3; i <= Math.sqrt(num); i += 2) {
+                if (num % i === 0) return false;
+            }
+            return true;
+        }
+
+        // أمثلة استخدام:
+        function runTask1() {
+            const taskDiv = document.createElement("div");
+            taskDiv.className = "task";
+            taskDiv.innerHTML = "<h2>Task 1: Check Parameters</h2>";
+            document.getElementById("output").appendChild(taskDiv);
+
+            try {
+                printToPage("Checking parameters with 1, 2:");
+                checkParameters(1, 2); // صح
+            } catch (error) {
+                printToPage(error.message, true);
+            }
+
+            try {
+                printToPage("Checking parameters with 1:");
+                checkParameters(1); // هتطلع error
+            } catch (error) {
+                printToPage(error.message, true);
+            }
+        }
+
+        function runTask2() {
+            const taskDiv = document.createElement("div");
+            taskDiv.className = "task";
+            taskDiv.innerHTML = "<h2>Task 2: Add Numbers</h2>";
+            document.getElementById("output").appendChild(taskDiv);
+
+            try {
+                printToPage("Adding numbers 1, 2, 3:");
+                printToPage("Sum result: " + addNumbers(1, 2, 3)); // 6
+            } catch (error) {
+                printToPage(error.message, true);
+            }
+
+            try {
+                printToPage("Adding numbers 1, '2', 3:");
+                printToPage("Sum result: " + addNumbers(1, '2', 3)); // Throws error
+            } catch (error) {
+                printToPage(error.message, true);
+            }
+        }
+
+        function runTask3() {
+            const taskDiv = document.createElement("div");
+            taskDiv.className = "task";
+            taskDiv.innerHTML = "<h2>Task 3: Reverse Parameters</h2>";
+            document.getElementById("output").appendChild(taskDiv);
+
+            printToPage("Reversing parameters 1, 2, 3:");
+            printToPage("Reversed parameters: " + reverseParameters(1, 2, 3)); // [3, 2, 1]
+
+            printToPage("Reversing parameters 'a', 'b', 'c':");
+            printToPage("Reversed parameters: " + reverseParameters('a', 'b', 'c')); // ['c', 'b', 'a']
+        }
+
+        function runTask4() {
+            const taskDiv = document.createElement("div");
+            taskDiv.className = "task";
+            taskDiv.innerHTML = "<h2>Task 4: Check Prime Numbers</h2>";
+            document.getElementById("output").appendChild(taskDiv);
+
+            printToPage("Checking if 2 is a prime number:");
+            printToPage("Is 2 a prime number? " + isPrime(2)); // true
+
+            printToPage("Checking if 4 is a prime number:");
+            printToPage("Is 4 a prime number? " + isPrime(4)); // false
+
+            printToPage("Checking if 29 is a prime number:");
+            printToPage("Is 29 a prime number? " + isPrime(29)); // true
+        }
+
+        // تشغيل الـ Tasks
+        runTask1();
+        runTask2();
+        runTask3();
+        runTask4();
+    </script>
+</body>
+</html>
